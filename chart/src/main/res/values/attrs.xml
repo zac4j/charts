@@ -1,0 +1,15 @@
+<resources>
+
+    <declare-styleable name="BarChartView">
+        <attr name="android:padding"/>
+        <attr format="dimension" name="barCount"/>
+        <attr format="dimension" name="barGap"/>
+    </declare-styleable>
+
+    <declare-styleable name="LineChartView">
+        <attr format="string" name="exampleString"/>
+        <attr format="dimension" name="exampleDimension"/>
+        <attr format="color" name="exampleColor"/>
+        <attr format="color|reference" name="exampleDrawable"/>
+    </declare-styleable>
+</resources>
