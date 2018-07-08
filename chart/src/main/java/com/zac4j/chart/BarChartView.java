@@ -8,9 +8,16 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewDebug;
+import com.zac4j.chart.model.Bar;
+import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import static com.zac4j.chart.ViewUtils.isEmpty;
 
 /**
  * This view describes the bar chart, a two-axis chart with rectangular bars.
@@ -20,11 +27,12 @@ public class BarChartView extends View {
     private Paint mBarPaint;
     private Paint mGridPaint;
     private Paint mGuidelinePaint;
+    private Paint mTextPaint;
 
     private float mPadding;
     private float mBarGap;
     private float mBarCount;
-    private List<Float> mBarData;
+    private List<Bar> mBarData;
 
     public BarChartView(Context context) {
         super(context);
@@ -71,13 +79,17 @@ public class BarChartView extends View {
         mGuidelinePaint.setStyle(Paint.Style.STROKE);
         mGuidelinePaint.setColor(Color.BLACK);
         mGuidelinePaint.setStrokeWidth(8);
+
+        mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mTextPaint.setTextAlign(Paint.Align.LEFT);
+        mTextPaint.setColor(Color.BLACK);
+        mTextPaint.setTextSize(16.f);
     }
 
-    public void setBarData(List<Float> barData) {
+    public void setBarData(List<Bar> barData) {
         mBarData = barData;
         invalidate();
     }
-
 
     @Override protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -97,12 +109,19 @@ public class BarChartView extends View {
         canvas.drawLine(gridLeft, gridBottom, gridRight, gridBottom, mGridPaint);
         canvas.drawLine(gridLeft, gridBottom, gridLeft, gridTop, mGridPaint);
 
+        if (isEmpty(mBarData)) {
+            return;
+        }
+
         // Draw guideline
-        float guidelineSpacing = (gridBottom - gridTop) / 10.f;
+        float guidelineSpacing = (gridBottom - gridTop) / 10;
         float y;
+        NumberFormat formatter = NumberFormat.getPercentInstance();
+        formatter.setMinimumFractionDigits(2);
         for (int i = 0; i < 10; i++) {
             y = gridTop + i * guidelineSpacing;
             canvas.drawLine(gridLeft, y, gridRight, y, mGuidelinePaint);
+            canvas.drawText(formatter.format(i * 10), gridLeft, y, mTextPaint);
         }
 
         // Draw bar
@@ -110,9 +129,9 @@ public class BarChartView extends View {
         float barWidth = (gridRight - gridLeft - totalBarGap) / mBarCount;
         float barLeft = gridLeft + mBarGap;
         float barRight = barLeft + barWidth;
-        for (float percentage : mBarData) {
+        for (Bar bar : mBarData) {
             // Calculate top of bar base on percentage
-            float top = gridTop + gridBottom * (1.f - percentage);
+            float top = gridTop + gridBottom * (1.f - bar.getPercentage());
             canvas.drawRect(barLeft, top, barRight, gridBottom, mBarPaint);
 
             // Shift over left/right bar bounds.
