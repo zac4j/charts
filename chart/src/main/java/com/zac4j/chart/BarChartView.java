@@ -5,19 +5,15 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Pair;
 import android.view.View;
-import android.view.ViewDebug;
 import com.zac4j.chart.model.Bar;
 import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.zac4j.chart.ViewUtils.isEmpty;
+import static com.zac4j.chart.ViewUtils.spToPx;
 
 /**
  * This view describes the bar chart, a two-axis chart with rectangular bars.
@@ -25,13 +21,15 @@ import static com.zac4j.chart.ViewUtils.isEmpty;
 public class BarChartView extends View {
 
     private Paint mBarPaint;
-    private Paint mGridPaint;
+    private Paint mAxisPaint;
     private Paint mGuidelinePaint;
     private Paint mTextPaint;
 
     private float mPadding;
     private float mBarGap;
     private float mBarCount;
+    private float mXAxisLabelSize;
+    private float mYAxisLabelSize;
     private List<Bar> mBarData;
 
     public BarChartView(Context context) {
@@ -56,9 +54,11 @@ public class BarChartView extends View {
 
         // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
         // values that should fall on pixel boundaries.
-        mPadding = a.getDimension(R.styleable.BarChartView_android_padding, mPadding);
+        mPadding = a.getDimension(R.styleable.BarChartView_android_padding, 4);
         mBarGap = a.getDimension(R.styleable.BarChartView_barGap, 8);
         mBarCount = a.getDimension(R.styleable.BarChartView_barCount, 6);
+        mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, 6);
+        mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, 6);
 
         a.recycle();
 
@@ -70,20 +70,20 @@ public class BarChartView extends View {
         mBarPaint.setStyle(Paint.Style.FILL);
         mBarPaint.setColor(Color.CYAN);
 
-        mGridPaint = new Paint();
-        mGridPaint.setStyle(Paint.Style.STROKE);
-        mGridPaint.setColor(Color.RED);
-        mGridPaint.setStrokeWidth(8);
+        mAxisPaint = new Paint();
+        mAxisPaint.setStyle(Paint.Style.STROKE);
+        mAxisPaint.setColor(Color.RED);
+        mAxisPaint.setStrokeWidth(2);
 
         mGuidelinePaint = new Paint();
         mGuidelinePaint.setStyle(Paint.Style.STROKE);
         mGuidelinePaint.setColor(Color.BLACK);
-        mGuidelinePaint.setStrokeWidth(8);
+        mGuidelinePaint.setStrokeWidth(2);
 
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextAlign(Paint.Align.LEFT);
         mTextPaint.setColor(Color.BLACK);
-        mTextPaint.setTextSize(16.f);
+        mTextPaint.setTextSize(spToPx(16.f));
     }
 
     public void setBarData(List<Bar> barData) {
@@ -91,7 +91,8 @@ public class BarChartView extends View {
         invalidate();
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         drawAxesLine(canvas);
@@ -106,8 +107,8 @@ public class BarChartView extends View {
         final float gridRight = width - mPadding;
 
         // Draw X/Y Axis
-        canvas.drawLine(gridLeft, gridBottom, gridRight, gridBottom, mGridPaint);
-        canvas.drawLine(gridLeft, gridBottom, gridLeft, gridTop, mGridPaint);
+        canvas.drawLine(gridLeft, gridBottom, gridRight, gridBottom, mAxisPaint);
+        canvas.drawLine(gridLeft, gridBottom, gridLeft, gridTop, mAxisPaint);
 
         if (isEmpty(mBarData)) {
             return;
