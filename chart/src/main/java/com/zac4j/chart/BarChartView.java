@@ -23,7 +23,8 @@ public class BarChartView extends View {
     private Paint mBarPaint;
     private Paint mAxisPaint;
     private Paint mGuidelinePaint;
-    private Paint mTextPaint;
+    private Paint mXAxisTextPaint;
+    private Paint mYAxisTextPaint;
 
     private float mPadding;
     private float mBarGap;
@@ -57,8 +58,8 @@ public class BarChartView extends View {
         mPadding = a.getDimension(R.styleable.BarChartView_android_padding, 4);
         mBarGap = a.getDimension(R.styleable.BarChartView_barGap, 8);
         mBarCount = a.getDimension(R.styleable.BarChartView_barCount, 6);
-        mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, 6);
-        mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, 6);
+        mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, spToPx(14));
+        mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, spToPx(14));
 
         a.recycle();
 
@@ -80,10 +81,15 @@ public class BarChartView extends View {
         mGuidelinePaint.setColor(Color.BLACK);
         mGuidelinePaint.setStrokeWidth(2);
 
-        mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextAlign(Paint.Align.LEFT);
-        mTextPaint.setColor(Color.BLACK);
-        mTextPaint.setTextSize(spToPx(16.f));
+        mXAxisTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mXAxisTextPaint.setTextAlign(Paint.Align.LEFT);
+        mXAxisTextPaint.setColor(Color.BLACK);
+        mXAxisTextPaint.setTextSize(spToPx(16.f));
+
+        mYAxisTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mYAxisTextPaint.setTextAlign(Paint.Align.LEFT);
+        mYAxisTextPaint.setColor(Color.BLACK);
+        mYAxisTextPaint.setTextSize(spToPx(16.f));
     }
 
     public void setBarData(List<Bar> barData) {
@@ -122,7 +128,7 @@ public class BarChartView extends View {
         for (int i = 0; i < 10; i++) {
             y = gridTop + i * guidelineSpacing;
             canvas.drawLine(gridLeft, y, gridRight, y, mGuidelinePaint);
-            canvas.drawText(formatter.format(i * 10), gridLeft, y, mTextPaint);
+            canvas.drawText(formatter.format(i * 10), gridLeft, y, mYAxisTextPaint);
         }
 
         // Draw bar
