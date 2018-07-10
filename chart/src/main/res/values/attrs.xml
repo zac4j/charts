@@ -4,6 +4,7 @@
         <attr name="android:padding"/>
         <attr format="dimension" name="barCount"/>
         <attr format="dimension" name="barGap"/>
+        <attr format="dimension" name="labelGap"/>
         <attr format="dimension" name="xAxisLabelSize"/>
         <attr format="dimension" name="yAxisLabelSize"/>
     </declare-styleable>

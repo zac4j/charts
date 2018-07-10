@@ -20,6 +20,8 @@ import static com.zac4j.chart.ViewUtils.spToPx;
  */
 public class BarChartView extends View {
 
+    private static final String PERCENTAGE_PERFECT = "100.00%";
+
     private Paint mBarPaint;
     private Paint mAxisPaint;
     private Paint mGuidelinePaint;
@@ -31,6 +33,7 @@ public class BarChartView extends View {
     private float mBarCount;
     private float mXAxisLabelSize;
     private float mYAxisLabelSize;
+    private float mLabelGap;
     private List<Bar> mBarData;
 
     public BarChartView(Context context) {
@@ -55,11 +58,12 @@ public class BarChartView extends View {
 
         // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
         // values that should fall on pixel boundaries.
-        mPadding = a.getDimension(R.styleable.BarChartView_android_padding, 4);
-        mBarGap = a.getDimension(R.styleable.BarChartView_barGap, 8);
-        mBarCount = a.getDimension(R.styleable.BarChartView_barCount, 6);
-        mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, spToPx(14));
-        mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, spToPx(14));
+        mPadding = a.getDimensionPixelSize(R.styleable.BarChartView_android_padding, 4);
+        mBarGap = a.getDimensionPixelSize(R.styleable.BarChartView_barGap, 8);
+        mLabelGap = a.getDimensionPixelSize(R.styleable.BarChartView_labelGap, 4);
+        mBarCount = a.getDimensionPixelSize(R.styleable.BarChartView_barCount, 6);
+        mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, spToPx(12));
+        mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, spToPx(12));
 
         a.recycle();
 
@@ -84,12 +88,12 @@ public class BarChartView extends View {
         mXAxisTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mXAxisTextPaint.setTextAlign(Paint.Align.LEFT);
         mXAxisTextPaint.setColor(Color.BLACK);
-        mXAxisTextPaint.setTextSize(spToPx(16.f));
+        mXAxisTextPaint.setTextSize(mXAxisLabelSize);
 
         mYAxisTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mYAxisTextPaint.setTextAlign(Paint.Align.LEFT);
         mYAxisTextPaint.setColor(Color.BLACK);
-        mYAxisTextPaint.setTextSize(spToPx(16.f));
+        mYAxisTextPaint.setTextSize(mYAxisLabelSize);
     }
 
     public void setBarData(List<Bar> barData) {
@@ -107,10 +111,16 @@ public class BarChartView extends View {
     private void drawAxesLine(Canvas canvas) {
         final int height = getHeight();
         final int width = getWidth();
-        final float gridLeft = mPadding;
-        final float gridBottom = height - mPadding;
-        final float gridTop = mPadding;
-        final float gridRight = width - mPadding;
+
+        final float startX = mPadding;
+        final float stopX = width - mPadding;
+        final float startY = mPadding;
+        final float stopY = height - mPadding;
+
+        final float gridLeft = startX + getYAxisLabelWidth() + mLabelGap;
+        final float gridBottom = stopY - ViewUtils.getTextHeight(mXAxisTextPaint, "A");
+        final float gridTop = startY;
+        final float gridRight = stopX;
 
         // Draw X/Y Axis
         canvas.drawLine(gridLeft, gridBottom, gridRight, gridBottom, mAxisPaint);
@@ -128,8 +138,11 @@ public class BarChartView extends View {
         for (int i = 0; i < 10; i++) {
             y = gridTop + i * guidelineSpacing;
             canvas.drawLine(gridLeft, y, gridRight, y, mGuidelinePaint);
-            canvas.drawText(formatter.format(i * 10), gridLeft, y, mYAxisTextPaint);
+            canvas.drawText(formatter.format((10 - i) * 0.1f), startX,
+                y + getYAxisLabelHeight() / 2.f, mYAxisTextPaint);
         }
+        // draw 0
+        canvas.drawText("0", getYAxisLabelWidth() - mYAxisLabelSize, gridBottom, mYAxisTextPaint);
 
         // Draw bar
         float totalBarGap = mBarGap * (mBarCount + 1);
@@ -145,5 +158,13 @@ public class BarChartView extends View {
             barLeft = barRight + mBarGap;
             barRight = barLeft + barWidth;
         }
+    }
+
+    private float getYAxisLabelWidth() {
+        return ViewUtils.getTextWidth(mYAxisTextPaint, PERCENTAGE_PERFECT);
+    }
+
+    private float getYAxisLabelHeight() {
+        return ViewUtils.getTextHeight(mYAxisTextPaint, PERCENTAGE_PERFECT);
     }
 }
