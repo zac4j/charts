@@ -152,13 +152,14 @@ public class BarChartView extends View {
         for (int i = 0; i < barCount; i++) {
             // Calculate top of bar base on percentage
             Bar bar = mBarData.get(i);
-            float top = gridTop + gridBottom * (1.f - bar.getPercentage());
+            float top = gridTop + gridBottom * (1.0f - bar.getPercentage());
+            top = top > barBottom ? barBottom : top;
             canvas.drawRect(barLeft, top, barRight, barBottom, mBarPaint);
 
             // Draw X axis labels
             float barCenter = (barLeft + barRight) / 2.f - mBarGap;
-            float xAxisLabelBottom = stopY + mBarGap;
-            canvas.drawText(Constant.ALPHABET[i], barCenter, xAxisLabelBottom, mXAxisTextPaint);
+            float xAxisLabelBottom = stopY + mLabelGap;
+            canvas.drawText(bar.getLetter(), barCenter, xAxisLabelBottom, mXAxisTextPaint);
 
             // Shift over left/right bar bounds.
             barLeft = barRight + mBarGap;

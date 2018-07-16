@@ -1,4 +1,4 @@
-package com.zac4j.chart;
+package com.zac4j.sample;
 
 /**
  * Created by zac on 2018/7/16.

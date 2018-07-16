@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.zac4j.sample.Constant.ALPHABET;
+
 public class MainActivity extends AppCompatActivity {
 
     private BarChartView mBarChartView;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < 26; i++) {
             float percentage = random.nextInt(100) * 0.01f;
-            Bar bar = new Bar("" + i, percentage);
+            Bar bar = new Bar(ALPHABET[i], percentage);
             data.add(bar);
         }
         mBarChartView.setBarData(data);
