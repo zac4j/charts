@@ -30,7 +30,6 @@ public class BarChartView extends View {
 
     private float mPadding;
     private float mBarGap;
-    private float mBarCount;
     private float mXAxisLabelSize;
     private float mYAxisLabelSize;
     private float mLabelGap;
@@ -61,7 +60,6 @@ public class BarChartView extends View {
         mPadding = a.getDimensionPixelSize(R.styleable.BarChartView_android_padding, 4);
         mBarGap = a.getDimensionPixelSize(R.styleable.BarChartView_barGap, 8);
         mLabelGap = a.getDimensionPixelSize(R.styleable.BarChartView_labelGap, 4);
-        mBarCount = a.getDimensionPixelSize(R.styleable.BarChartView_barCount, 6);
         mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, spToPx(12));
         mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, spToPx(12));
 
@@ -77,12 +75,12 @@ public class BarChartView extends View {
 
         mAxisPaint = new Paint();
         mAxisPaint.setStyle(Paint.Style.STROKE);
-        mAxisPaint.setColor(Color.RED);
+        mAxisPaint.setColor(Color.BLACK);
         mAxisPaint.setStrokeWidth(2);
 
         mGuidelinePaint = new Paint();
         mGuidelinePaint.setStyle(Paint.Style.STROKE);
-        mGuidelinePaint.setColor(Color.BLACK);
+        mGuidelinePaint.setColor(Color.LTGRAY);
         mGuidelinePaint.setStrokeWidth(2);
 
         mXAxisTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -145,14 +143,22 @@ public class BarChartView extends View {
         canvas.drawText("0", getYAxisLabelWidth() - mYAxisLabelSize, gridBottom, mYAxisTextPaint);
 
         // Draw bar
-        float totalBarGap = mBarGap * (mBarCount + 1);
-        float barWidth = (gridRight - gridLeft - totalBarGap) / mBarCount;
+        int barCount = mBarData.size();
+        float totalBarGap = mBarGap * (barCount + 1);
+        float barWidth = (gridRight - gridLeft - totalBarGap) / barCount;
         float barLeft = gridLeft + mBarGap;
         float barRight = barLeft + barWidth;
-        for (Bar bar : mBarData) {
+        float barBottom = gridBottom - mBarGap;
+        for (int i = 0; i < barCount; i++) {
             // Calculate top of bar base on percentage
+            Bar bar = mBarData.get(i);
             float top = gridTop + gridBottom * (1.f - bar.getPercentage());
-            canvas.drawRect(barLeft, top, barRight, gridBottom, mBarPaint);
+            canvas.drawRect(barLeft, top, barRight, barBottom, mBarPaint);
+
+            // Draw X axis labels
+            float barCenter = (barLeft + barRight) / 2.f - mBarGap;
+            float xAxisLabelBottom = stopY + mBarGap;
+            canvas.drawText(Constant.ALPHABET[i], barCenter, xAxisLabelBottom, mXAxisTextPaint);
 
             // Shift over left/right bar bounds.
             barLeft = barRight + mBarGap;

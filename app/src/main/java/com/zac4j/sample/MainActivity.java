@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupData() {
         List<Bar> data = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 6; i++) {
+
+        for (int i = 0; i < 26; i++) {
             float percentage = random.nextInt(100) * 0.01f;
             Bar bar = new Bar("" + i, percentage);
             data.add(bar);
