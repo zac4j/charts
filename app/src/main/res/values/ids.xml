@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="main_barchart" type="id"/>
+    <item name="main_bar_chart" type="id"/>
 </resources>

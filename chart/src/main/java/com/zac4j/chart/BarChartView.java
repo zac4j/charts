@@ -16,12 +16,15 @@ import static com.zac4j.chart.ViewUtils.isEmpty;
 import static com.zac4j.chart.ViewUtils.spToPx;
 
 /**
+ * @author Zac
+ *
  * This view describes the bar chart, a two-axis chart with rectangular bars.
  */
 public class BarChartView extends View {
 
     private static final String PERCENTAGE_PERFECT = "100.00%";
 
+    // Paints
     private Paint mBarPaint;
     private Paint mAxisPaint;
     private Paint mGuidelinePaint;
@@ -29,10 +32,15 @@ public class BarChartView extends View {
     private Paint mYAxisTextPaint;
 
     private float mPadding;
+    // Horizontal distance between two bars.
     private float mBarGap;
-    private float mXAxisLabelSize;
-    private float mYAxisLabelSize;
+    // Distance between text label and axes.
     private float mLabelGap;
+    // The text size of text label for x axis.
+    private float mXAxisLabelSize;
+    // The text size of text label for y axis.
+    private float mYAxisLabelSize;
+    // Bar data
     private List<Bar> mBarData;
 
     public BarChartView(Context context) {

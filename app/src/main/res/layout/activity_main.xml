@@ -9,14 +9,18 @@
     >
 
     <com.zac4j.chart.BarChartView
-        android:id="@id/main_barchart"
+        android:id="@id/main_bar_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
+        android:padding="@dimen/space.medium"
+        app:barGap="@dimen/space.small"
+        app:labelGap="@dimen/space.small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:xAxisLabelSize="12sp"
+        app:yAxisLabelSize="12sp"
         />
 
 </android.support.constraint.ConstraintLayout>
