@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBarChartView = findViewById(R.id.main_barchart);
+        mBarChartView = findViewById(R.id.main_bar_chart);
         setupData();
     }
 

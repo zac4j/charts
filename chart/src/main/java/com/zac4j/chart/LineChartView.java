@@ -10,10 +10,15 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import static com.zac4j.chart.ViewUtils.spToPx;
+
 /**
- * TODO: document your custom view class.
+ * @author Zac
+ *
+ * This view describes a simple line chart.
  */
-public class  LineChartView extends View {
+public class LineChartView extends View {
+
     private String mExampleString; // TODO: use a default from R.string...
     private int mExampleColor = Color.RED; // TODO: use a default from R.color...
     private float mExampleDimension = 0; // TODO: use a default from R.dimen...
@@ -22,6 +27,30 @@ public class  LineChartView extends View {
     private TextPaint mTextPaint;
     private float mTextWidth;
     private float mTextHeight;
+
+    private float mPadding;
+    // Title of x axis labels.
+    private String mXAxisTitle;
+    // Title of y axis labels.
+    private String mYAxisTitle;
+    // The text size of text title for x axis.
+    private float mXAxisTitleSize;
+    // The text size of text title for y axis.
+    private float mYAxisTitleSize;
+    // The text size of text label for x axis.
+    private float mXAxisLabelSize;
+    // The text size of text label for y axis.
+    private float mYAxisLabelSize;
+    // The width of line's stroke.
+    private float mLineWidth;
+    // The color of line 's stroke.
+    private int mLineColor = Color.DKGRAY;
+
+    // Paints
+    private Paint mAxisPaint;
+    private Paint mLinePaint;
+    private TextPaint mXAxisTextPaint;
+    private TextPaint mYAxisTextPaint;
 
     public LineChartView(Context context) {
         super(context);
@@ -55,8 +84,6 @@ public class  LineChartView extends View {
             mExampleDrawable.setCallback(this);
         }
 
-        a.recycle();
-
         // Set up a default TextPaint object
         mTextPaint = new TextPaint();
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -64,6 +91,37 @@ public class  LineChartView extends View {
 
         // Update TextPaint and text measurements from attributes
         invalidateTextPaintAndMeasurements();
+
+        mPadding = a.getDimensionPixelSize(R.styleable.BarChartView_android_padding, 4);
+        mXAxisTitle = a.getString(R.styleable.BarChartView_xAxisTitleSize);
+        mYAxisTitle = a.getString(R.styleable.BarChartView_yAxisTitleSize);
+        mXAxisTitleSize = a.getDimension(R.styleable.BarChartView_xAxisTitleSize, spToPx(12));
+        mYAxisTitleSize = a.getDimension(R.styleable.BarChartView_yAxisTitleSize, spToPx(12));
+        mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, spToPx(12));
+        mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, spToPx(12));
+
+        mLineColor = a.getColor(R.styleable.LineChartView_lineColor, mLineColor);
+        mLineWidth = a.getDimension(R.styleable.LineChartView_lineWidth, mLineWidth);
+
+        a.recycle();
+
+        createChartPaints();
+    }
+
+    private void createChartPaints() {
+        Paint mAxisPaint = new Paint();
+        mAxisPaint.setStyle(Paint.Style.STROKE);
+        mAxisPaint.setColor(Color.BLACK);
+        mAxisPaint.setStrokeWidth(2);
+
+        Paint mLinePaint = new Paint();
+        mLinePaint.setStyle(Paint.Style.STROKE);
+        mLinePaint.setStrokeWidth(mLineWidth);
+        mLinePaint.setColor(mLineColor);
+
+        TextPaint mXAxisTextPaint = new TextPaint();
+
+        TextPaint mYAxisTextPaint = new TextPaint();
     }
 
     private void invalidateTextPaintAndMeasurements() {
@@ -75,7 +133,8 @@ public class  LineChartView extends View {
         mTextHeight = fontMetrics.bottom;
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         // TODO: consider storing these as member variables to reduce

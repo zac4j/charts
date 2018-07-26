@@ -28,8 +28,8 @@ public class BarChartView extends View {
     private Paint mBarPaint;
     private Paint mAxisPaint;
     private Paint mGuidelinePaint;
-    private Paint mXAxisTextPaint;
-    private Paint mYAxisTextPaint;
+    private TextPaint mXAxisTextPaint;
+    private TextPaint mYAxisTextPaint;
 
     private float mPadding;
     // Horizontal distance between two bars.
@@ -73,10 +73,10 @@ public class BarChartView extends View {
 
         a.recycle();
 
-        createPaints();
+        createChartPaints();
     }
 
-    private void createPaints() {
+    private void createChartPaints() {
         mBarPaint = new Paint();
         mBarPaint.setStyle(Paint.Style.FILL);
         mBarPaint.setColor(Color.CYAN);
@@ -175,10 +175,20 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Get the width of y axis labels.
+     *
+     * @return the width of y axis labels.
+     */
     private float getYAxisLabelWidth() {
         return ViewUtils.getTextWidth(mYAxisTextPaint, PERCENTAGE_PERFECT);
     }
 
+    /**
+     * Get the height of y axis labels.
+     *
+     * @return the height of y axis labels
+     */
     private float getYAxisLabelHeight() {
         return ViewUtils.getTextHeight(mYAxisTextPaint, PERCENTAGE_PERFECT);
     }

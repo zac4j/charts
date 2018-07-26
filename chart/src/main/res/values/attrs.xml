@@ -1,14 +1,34 @@
 <resources>
 
+    <attr format="string" name="xAxisTitle"/>
+    <attr format="string" name="yAxisTitle"/>
+    <attr format="dimension" name="xAxisTitleSize"/>
+    <attr format="dimension" name="yAxisTitleSize"/>
+    <attr format="dimension" name="xAxisLabelSize"/>
+    <attr format="dimension" name="yAxisLabelSize"/>
+
     <declare-styleable name="BarChartView">
         <attr name="android:padding"/>
+        <attr name="xAxisTitle"/>
+        <attr name="yAxisTitle"/>
+        <attr name="xAxisTitleSize"/>
+        <attr name="yAxisTitleSize"/>
+        <attr name="xAxisLabelSize"/>
+        <attr name="yAxisLabelSize"/>
         <attr format="dimension" name="barGap"/>
         <attr format="dimension" name="labelGap"/>
-        <attr format="dimension" name="xAxisLabelSize"/>
-        <attr format="dimension" name="yAxisLabelSize"/>
     </declare-styleable>
 
     <declare-styleable name="LineChartView">
+        <attr name="android:padding"/>
+        <attr name="xAxisTitle"/>
+        <attr name="yAxisTitle"/>
+        <attr name="xAxisTitleSize"/>
+        <attr name="yAxisTitleSize"/>
+        <attr name="xAxisLabelSize"/>
+        <attr name="yAxisLabelSize"/>
+        <attr format="color" name="lineColor"/>
+        <attr format="dimension" name="lineWidth"/>
         <attr format="string" name="exampleString"/>
         <attr format="dimension" name="exampleDimension"/>
         <attr format="color" name="exampleColor"/>
