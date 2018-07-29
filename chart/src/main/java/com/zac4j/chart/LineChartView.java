@@ -19,6 +19,8 @@ import static com.zac4j.chart.ViewUtils.spToPx;
  */
 public class LineChartView extends View {
 
+    private static final String PERCENTAGE_PERFECT = "100%";
+
     private String mExampleString; // TODO: use a default from R.string...
     private int mExampleColor = Color.RED; // TODO: use a default from R.color...
     private float mExampleDimension = 0; // TODO: use a default from R.dimen...
@@ -44,13 +46,15 @@ public class LineChartView extends View {
     // The width of line's stroke.
     private float mLineWidth;
     // The color of line 's stroke.
-    private int mLineColor = Color.DKGRAY;
+    private int mLineColor = Color.parseColor("#FF4682B4");
 
     // Paints
     private Paint mAxisPaint;
     private Paint mLinePaint;
     private TextPaint mXAxisTextPaint;
+    private TextPaint mXAxisTitlePaint;
     private TextPaint mYAxisTextPaint;
+    private TextPaint mYAxisTitlePaint;
 
     public LineChartView(Context context) {
         super(context);
@@ -109,19 +113,35 @@ public class LineChartView extends View {
     }
 
     private void createChartPaints() {
-        Paint mAxisPaint = new Paint();
+        mAxisPaint = new Paint();
         mAxisPaint.setStyle(Paint.Style.STROKE);
         mAxisPaint.setColor(Color.BLACK);
         mAxisPaint.setStrokeWidth(2);
 
-        Paint mLinePaint = new Paint();
+        mLinePaint = new Paint();
         mLinePaint.setStyle(Paint.Style.STROKE);
         mLinePaint.setStrokeWidth(mLineWidth);
         mLinePaint.setColor(mLineColor);
 
-        TextPaint mXAxisTextPaint = new TextPaint();
+        mXAxisTextPaint = new TextPaint();
+        mXAxisTextPaint.setTextAlign(Paint.Align.LEFT);
+        mXAxisTextPaint.setColor(Color.BLACK);
+        mXAxisTextPaint.setTextSize(mXAxisLabelSize);
 
-        TextPaint mYAxisTextPaint = new TextPaint();
+        mXAxisTitlePaint = new TextPaint();
+        mXAxisTitlePaint.setTextAlign(Paint.Align.LEFT);
+        mXAxisTitlePaint.setColor(Color.BLACK);
+        mXAxisTitlePaint.setTextSize(mXAxisTitleSize);
+
+        mYAxisTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mYAxisTextPaint.setTextAlign(Paint.Align.LEFT);
+        mYAxisTextPaint.setColor(Color.BLACK);
+        mYAxisTextPaint.setTextSize(mYAxisLabelSize);
+
+        mYAxisTitlePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mYAxisTitlePaint.setTextAlign(Paint.Align.LEFT);
+        mYAxisTitlePaint.setColor(Color.BLACK);
+        mYAxisTitlePaint.setTextSize(mYAxisTitleSize);
     }
 
     private void invalidateTextPaintAndMeasurements() {
@@ -136,6 +156,8 @@ public class LineChartView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        drawChart(canvas);
 
         // TODO: consider storing these as member variables to reduce
         // allocations per draw cycle.
@@ -157,6 +179,25 @@ public class LineChartView extends View {
                 paddingTop + contentHeight);
             mExampleDrawable.draw(canvas);
         }
+    }
+
+    private void drawChart(Canvas canvas) {
+        final int width = getWidth();
+        final int height = getHeight();
+
+        final float startX = mPadding;
+        final float stopX = width - mPadding;
+        final float startY = mPadding;
+        final float stopY = height - mPadding;
+
+        final float axisLeft = startX + getYAxisLabelWidth();
+        final float axisBottom = stopY - ViewUtils.getTextHeight(mXAxisTextPaint, "A");
+        final float axisTop = startY;
+        final float axisRight = stopX;
+
+        // Draw X&Y Axis
+        canvas.drawLine(axisLeft, axisBottom, axisRight, axisBottom, mAxisPaint);
+        canvas.drawLine(axisLeft, axisBottom, axisLeft, axisTop, mAxisPaint);
     }
 
     /**
@@ -236,5 +277,23 @@ public class LineChartView extends View {
      */
     public void setExampleDrawable(Drawable exampleDrawable) {
         mExampleDrawable = exampleDrawable;
+    }
+
+    /**
+     * Get the width of y axis labels.
+     *
+     * @return the width of y axis labels.
+     */
+    private float getYAxisLabelWidth() {
+        return ViewUtils.getTextWidth(mYAxisTextPaint, PERCENTAGE_PERFECT);
+    }
+
+    /**
+     * Get the height of y axis labels.
+     *
+     * @return the height of y axis labels
+     */
+    private float getYAxisLabelHeight() {
+        return ViewUtils.getTextHeight(mYAxisTextPaint, PERCENTAGE_PERFECT);
     }
 }
