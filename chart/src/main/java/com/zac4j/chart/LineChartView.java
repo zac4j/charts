@@ -96,13 +96,13 @@ public class LineChartView extends View {
         // Update TextPaint and text measurements from attributes
         invalidateTextPaintAndMeasurements();
 
-        mPadding = a.getDimensionPixelSize(R.styleable.BarChartView_android_padding, 4);
-        mXAxisTitle = a.getString(R.styleable.BarChartView_xAxisTitleSize);
-        mYAxisTitle = a.getString(R.styleable.BarChartView_yAxisTitleSize);
-        mXAxisTitleSize = a.getDimension(R.styleable.BarChartView_xAxisTitleSize, spToPx(12));
-        mYAxisTitleSize = a.getDimension(R.styleable.BarChartView_yAxisTitleSize, spToPx(12));
-        mXAxisLabelSize = a.getDimension(R.styleable.BarChartView_xAxisLabelSize, spToPx(12));
-        mYAxisLabelSize = a.getDimension(R.styleable.BarChartView_yAxisLabelSize, spToPx(12));
+        mPadding = a.getDimensionPixelSize(R.styleable.LineChartView_android_padding, 4);
+        mXAxisTitle = a.getString(R.styleable.LineChartView_xAxisTitleSize);
+        mYAxisTitle = a.getString(R.styleable.LineChartView_yAxisTitleSize);
+        mXAxisTitleSize = a.getDimension(R.styleable.LineChartView_xAxisTitleSize, spToPx(12));
+        mYAxisTitleSize = a.getDimension(R.styleable.LineChartView_yAxisTitleSize, spToPx(12));
+        mXAxisLabelSize = a.getDimension(R.styleable.LineChartView_xAxisLabelSize, spToPx(12));
+        mYAxisLabelSize = a.getDimension(R.styleable.LineChartView_yAxisLabelSize, spToPx(12));
 
         mLineColor = a.getColor(R.styleable.LineChartView_lineColor, mLineColor);
         mLineWidth = a.getDimension(R.styleable.LineChartView_lineWidth, mLineWidth);
