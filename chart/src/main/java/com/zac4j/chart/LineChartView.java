@@ -9,7 +9,11 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
+import com.zac4j.chart.model.Stock;
+import java.util.Collections;
+import java.util.List;
 
+import static com.zac4j.chart.ViewUtils.isEmpty;
 import static com.zac4j.chart.ViewUtils.spToPx;
 
 /**
@@ -55,6 +59,8 @@ public class LineChartView extends View {
     private TextPaint mXAxisTitlePaint;
     private TextPaint mYAxisTextPaint;
     private TextPaint mYAxisTitlePaint;
+
+    private List<Stock> mStocks;
 
     public LineChartView(Context context) {
         super(context);
@@ -144,6 +150,10 @@ public class LineChartView extends View {
         mYAxisTitlePaint.setTextSize(mYAxisTitleSize);
     }
 
+    public void setDatum(List<Stock> stocks) {
+        mStocks = stocks;
+    }
+
     private void invalidateTextPaintAndMeasurements() {
         mTextPaint.setTextSize(mExampleDimension);
         mTextPaint.setColor(mExampleColor);
@@ -195,9 +205,21 @@ public class LineChartView extends View {
         final float axisTop = startY;
         final float axisRight = stopX;
 
-        // Draw X&Y Axis
+        // Draw Axes
         canvas.drawLine(axisLeft, axisBottom, axisRight, axisBottom, mAxisPaint);
         canvas.drawLine(axisLeft, axisBottom, axisLeft, axisTop, mAxisPaint);
+
+        // Draw Axes ticks
+        if (isEmpty(mStocks)) {
+            return;
+        }
+
+        int length = mStocks.size();
+        for (int i = 0; i < length; i++) {
+            // Draw X axis ticks
+
+        }
+
     }
 
     /**
