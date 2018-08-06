@@ -2,6 +2,7 @@ package com.zac4j.sample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import com.zac4j.chart.LineChartView;
 import com.zac4j.chart.algs.SortByDate;
 import com.zac4j.chart.model.Stock;
@@ -20,6 +21,8 @@ import java.util.Locale;
  * Description:Line chart ui
  */
 public class LineChartActivity extends AppCompatActivity {
+
+    private static final String TAG = "LineChartActivity";
 
     private LineChartView mLineChartView;
 
@@ -72,6 +75,7 @@ public class LineChartActivity extends AppCompatActivity {
                     stocks.add(stock);
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    Log.e(TAG, "there is an error in data operation: " + e.getMessage());
                 }
             }
         }
